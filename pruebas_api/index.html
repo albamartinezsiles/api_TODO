@@ -8,8 +8,12 @@
 <body>
     <script>
 
-        fetch("/api-todo",{
-            method : "POST"
+        fetch("/api-todo/crear",{
+            method : "POST",
+            body : '{"tarea" : "valido"}',
+            headers : {
+                "Content-type" : "application/json"
+            }
         })
         .then(respuesta => respuesta.text())
         .then(respuesta => console.log(respuesta));
