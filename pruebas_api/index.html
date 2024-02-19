@@ -10,12 +10,12 @@
 
         let tarea = "aprender React";
 
-        fetch("/api-todo/crear",{
-            method : "POST",
+        fetch("/api-todo/borrar/1",{
+            method : "DELETE",/*
             body : JSON.stringify({tarea}),
             headers : {
                 "Content-type" : "application/json"
-            }
+            }*/
         })
         .then(respuesta => respuesta.text())
         .then(respuesta => console.log(respuesta));

@@ -1,7 +1,7 @@
 const express = require("express");
 require('dotenv').config();
 const servidor = express();
-const {getTareas,crearTarea} = require ("./db.js"); //traete la funcion getTareas
+const {getTareas,crearTarea,borrarTarea} = require ("./db.js"); //traete la funcion getTareas
 const {json} = require ("body-parser");
 
 servidor.use(json());
@@ -44,8 +44,15 @@ servidor.put("/api-todo", (peticion,respuesta) => {
     return respuesta.send("Esto es el método put");
 });
 
-servidor.delete("/api-todo", (peticion,respuesta) => {
-    return respuesta.send("Esto es el método delete");
+servidor.delete("/api-todo/borrar/:id", async (peticion,respuesta) => { //para localizar el id lo pedimos con params.id
+    try {
+        let cantidad = await borrarTarea(peticion.params.id);
+        return respuesta.json ({ resultado : cantidad ? "ok" : "ko"});
+    }catch (error) {
+      console.error(error);
+      respuesta.status(500);
+      return respuesta.json(error);
+    }
 });
 
 servidor.use((peticion,respuesta) => { //cualquier cosa que no encaje va a error not found!
