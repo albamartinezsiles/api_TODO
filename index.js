@@ -27,9 +27,15 @@ servidor.get("/api-todo", async (peticion,respuesta) => {
 servidor.post("/api-todo/crear", async (peticion,respuesta,siguiente) => {
     let {tarea} = peticion.body; //LC CLAVE ESTA AQUI. USAMOS { a : x } es lo que nos va a mandar el BACK. Lo esta desectructurando de un objeto que se supone que esta en la bd. Si el usuario luego no pone una tarea este valor será undefined
     if(tarea && tarea.trim() != ""){
-        return respuesta.send("Esto es el método post");
+        try{
+            let id = await crearTarea({tarea});
+            return respuesta.json({id});
+        }catch(error){
+            respuesta.status(500);
+            return respuesta.json(error);
+        }
     }
-    siguiente("no me enviaste tarea");
+    siguiente({ error : "falta el argumento tarea en el objeto JSON"});
     //throw "no me enviaste tarea"; //cuando hacemos un throw inmediatamente aterrizamos en ERROR, el último middleware que hemos hecho para responder errores
 
 });
@@ -43,11 +49,13 @@ servidor.delete("/api-todo", (peticion,respuesta) => {
 });
 
 servidor.use((peticion,respuesta) => { //cualquier cosa que no encaje va a error not found!
+    respuesta.status(404);
     respuesta.json ({ error : "not found" });
 });
 
 servidor.use((error, peticion,respuesta,siguiente) => {
-    respuesta.send("...error");
+    respuesta.status(400);
+    respuesta.json({error : "peticion no válida"});
 });
 
 servidor.listen(process.env.PORT);

@@ -3,10 +3,10 @@ const postgres = require("postgres");
 
 function conectar(){ // esta funcion retorna la conexion
     return postgres({
-        host : "process.env.DB_HOST",
-        database : "process.env.DB_NAME",
-        user : "process.env.DB_USER",
-        password : "process.env.DB_PASSWORD"
+        host : process.env.DB_HOST,
+        database : process.env.DB_NAME,
+        user : process.env.DB_USER,
+        password : process.env.DB_PASSWORD
     });
 }
 
@@ -33,7 +33,7 @@ function crearTarea({tarea}){
         let conexion = conectar(); 
 
         try{
-            let [{id}] = await conexion (`INSERT INTO tareas (tarea) VALUES (${tarea}) RETURNING id`); //la tarea está entre paréntesis porque es el campo que quiero escribir
+            let [{id}] = await conexion `INSERT INTO tareas (tarea) VALUES (${tarea}) RETURNING id`; //la tarea está entre paréntesis porque es el campo que quiero escribir
 
             conexion.end();
 
