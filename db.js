@@ -63,4 +63,40 @@ function borrarTarea(){
     });
 }
 
-module.exports = {getTareas,crearTarea,borrarTarea};
+function actualizarEstado(id){ 
+    return new Promise(async (fulfill,reject) => { 
+
+        let conexion = conectar(); 
+
+        try{
+            let {count} = await conexion`UPDATE tareas SET terminada = NOT terminada WHERE id = ${id}`; //COGE el valor de terminada. Si es terminada ponle que no. Es un toggle
+
+            conexion.end();
+
+            fulfill(count); 
+
+        }catch(error){
+            reject({error : "error en base de datos"});
+        }
+    });
+}
+
+function actualizarTexto(id,tarea){ 
+    return new Promise(async (fulfill,reject) => { 
+
+        let conexion = conectar(); 
+
+        try{
+            let {count} = await conexion`UPDATE tareas SET tarea = ${tarea} WHERE id = ${id}`;
+
+            conexion.end();
+
+            fulfill(count); 
+
+        }catch(error){
+            reject({error : "error en base de datos"});
+        }
+    });
+}
+
+module.exports = {getTareas,crearTarea,borrarTarea,actualizarEstado,actualizarTexto};
