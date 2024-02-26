@@ -10,7 +10,7 @@ function conectar(){ // esta funcion retorna la conexion
     });
 }
 
-function getTareas(){ 
+function getTareas(){ //no le pasamos nada porque su función es la de leer todas las tareas. Las demás si necesitan porque hacen una tarea específica.
     return new Promise(async (fulfill,reject) => { 
 
         let conexion = conectar(); 
@@ -45,17 +45,17 @@ function crearTarea({tarea}){
     });
 }
 
-function borrarTarea(){ 
-    return new Promise(async (fulfill,reject) => { 
+function borrarTarea(id){ //neceisto el id de la tarea que quiero borrar
+    return new Promise(async (fulfill,reject) => {  
 
         let conexion = conectar(); 
-
+        //usamos count porque queremos saber si la tarea existía o se borró. Si no existe no se borra nada (0) y si existe se borra (1)
         try{
-            let {count} = await conexion`DELETE * FROM tareas WHERE id = ${id}`;
+            let {count} = await conexion`DELETE FROM tareas WHERE id = ${id}`; //borra la tarea que tenga el id que le pasamos. Count es el numero de filas que se han borrado
 
-            conexion.end();
+            conexion.end(); //cerramos la conexion con postgres
 
-            fulfill(count); 
+            fulfill(count); //retornamos el 1 porque se ha borrado
 
         }catch(error){
             reject({error : "error en base de datos"});
@@ -98,5 +98,6 @@ function actualizarTexto(id,tarea){
         }
     });
 }
+//las funciones tambien se pueden hacer sin promesas usando un try catch y retornando el objeto, pero es mejor usar promesas
 
 module.exports = {getTareas,crearTarea,borrarTarea,actualizarEstado,actualizarTexto};
