@@ -10,7 +10,7 @@ servidor.use(cors());
 
 servidor.use(json());
 
-servidor.use("/pruebas",express.static("./pruebas_api"));//quiero servir estos archivos estáticos. Esto es solo para hacer pruebas
+servidor.use("/pruebas",express.static("./estatico"));//quiero servir estos archivos estáticos. Esto es solo para hacer pruebas
 
 servidor.get("/api-todo", async (peticion,respuesta) => { //Obtiene todas las tareas y las envíe en la respuesta.
     try{
